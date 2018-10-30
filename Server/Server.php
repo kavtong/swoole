@@ -14,7 +14,7 @@ class Server
 
     public function __construct()
     {
-        // 创建一个swoole_server对象
+        // 创建一个swoole_server对象: 监听地址 端口号
         $this->server = new  swoole_server('127.0.0.1', 8081);
 
         //  设置 swoole_server 对象的参数
@@ -76,8 +76,14 @@ class Server
         $server->send($fd, $data . ' - ' . time());
 
         // 调用 task  -1代表不指定task进程
-        $server->task('11111', -1);
-
+//        $server->task('11111', -1);
+        /**
+         * 在高级的版本中 还可以存在该写法 在1.8.6+的版本中，可以动态指定onFinish函数
+         * 此种状态下 就会覆盖 系统默认绑定的方法  onFinish
+         */
+        $server->task('1111', -1, function (swoole_server $server, $task_id, $data) {
+            echo "Task Finish Callback\n";
+        });
     }
 
     /**
