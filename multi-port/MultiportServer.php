@@ -20,7 +20,7 @@ class Server
         // swoole_server 监听多端口
         // 格式 ip地址 端口号 协议
         // addListener 方法 必须写在 start方法调用之前
-        $this->server->addListener('192.168.1.1',8082,SWOOLE_TCP);
+        $this->server->addListener('127.0.0.1',8082,SWOOLE_TCP);
 
         //  设置 swoole_server 对象的参数
         $this->server->set(array(
@@ -79,6 +79,9 @@ class Server
         /*$receiveData = $server->recv();*/
         // 向客户端发送数据
         $server->send($fd, $data . ' - ' . time());
+        // 获取连接的信息
+        $info = $server->connection_info($fd,$from_id);
+        var_dump($info);
 
         // 调用 task  -1代表不指定task进程
         $server->task('11111', -1);
